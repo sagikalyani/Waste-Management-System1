@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File a Complaint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .complaint-id {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>File a Complaint</h1>
+    </header>
+
+    <section>
+        <h2>Submit Your Complaint</h2>
+
+        <!-- Display Complaint ID -->
+        <div class="container">
+            <div class="complaint-id" id="complaint-id">
+                Complaint ID: <span id="id-value">Generating...</span>
+            </div>
+
+            <!-- Form with automatic location input -->
+            <form id="complaint-form">
+                <!-- User Info -->
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <!-- Automatic Location Input (Country, State, District, City) -->
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" readonly>
+
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" readonly>
+
+                <label for="district">District:</label>
+                <input type="text" id="district" name="district" readonly>
+
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" readonly>
+
+                <!-- Waste Type -->
+                <label for="waste-type">Type of Waste:</label>
+                <select id="waste-type" name="waste_type" required>
+                    <option value="" disabled selected>Select Waste Type</option>
+                    <option value="household">Household Waste</option>
+                    <option value="industrial">Industrial Waste</option>
+                    <option value="hazardous">Hazardous Waste</option>
+                    <option value="recyclable">Recyclable Waste</option>
+                    <option value="organic">Organic Waste</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="description">Complaint Description:</label>
+                <textarea id="description" name="description" rows="4" placeholder="Enter details of your complaint" required></textarea>
+
+                <!-- Submit Button -->
+                <input type="submit" value="Submit Complaint">
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Function to get the user's location using IP-API
+        async function fetchLocation() {
+            try {
+                const response = await fetch('http://ip-api.com/json/');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    // Populate form fields with location data
+                    document.getElementById('country').value = data.country;
+                    document.getElementById('state').value = data.regionName;
+                    document.getElementById('district').value = data.district || 'N/A'; // District may not always be available
+                    document.getElementById('city').value = data.city;
+                } else {
+                    alert('Failed to retrieve location');
+                }
+            } catch (error) {
+                console.error('Error fetching location:', error);
+            }
+        }
+
+        // Call the fetchLocation function when the page loads
+        window.onload = fetchLocation;
+
+        // Function to generate a unique complaint ID
+        function generateComplaintID() {
+            return 'C-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        }
+
+        // Handle form submission
+        document.getElementById('complaint-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent normal form submission
+
+            // Generate and display the complaint ID
+            const complaintID = generateComplaintID();
+            document.getElementById('id-value').textContent = complaintID;
+
+            // Redirect to success page after showing the ID
+            setTimeout(function() {
+                window.location.href = 'complainedsuccessfully.html';
+            }, 10000); // 10 seconds delay to show the ID before redirecting
+        });
+    </script>
+
+</body>
+</html>
