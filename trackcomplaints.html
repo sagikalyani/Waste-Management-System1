@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Track Complaints</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <header>
+        <h1>Waste Management System - Track Complaints</h1>
+    </header>
+    <section>
+        <h2>Track Your Complaint</h2>
+        <form action="track_complaint.php" method="POST">
+            <label for="complaint-id">Complaint ID:</label><br>
+            <input type="text" id="complaint-id" name="complaint_id" required><br><br>
+
+            <input type="submit" value="Track Complaint">
+        </form>
+
+        <!-- Complaint status details will be displayed here -->
+        <div id="complaint-status">
+            <!-- Complaint status details will be inserted here dynamically -->
+        </div>
+    </section>
+</body>
+</html>
